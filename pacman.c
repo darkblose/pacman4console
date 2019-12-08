@@ -51,12 +51,12 @@ WINDOW * win;
 WINDOW * status;
 
 //For colors
-enum { Wall = 1, Normal, Pellet, PowerUp, GhostWall, Ghost1, Ghost2, Ghost3, Ghost4, Ghost5, Ghost6, Ghost7, BlueGhost, Pacman };
+enum { Wall = 1, Normal, Pellet, PowerUp, GhostWall, Ghost1, Ghost2, Ghost3, Ghost4, Ghost5, Ghost6, Ghost7, Ghost8, BlueGhost, Pacman };
 
 //I know global variables are bad, but it's just sooo easy!
-int Loc[8][2] = { 0 };					//Location of Ghosts and Pacman
-int Dir[8][2] = { 0 };					//Direction of Ghosts and Pacman
-int StartingPoints[8][2] = { 0 };			//Default location in case Pacman/Ghosts die
+int Loc[9][2] = { 0 };					//Location of Ghosts and Pacman
+int Dir[9][2] = { 0 };					//Direction of Ghosts and Pacman
+int StartingPoints[9][2] = { 0 };			//Default location in case Pacman/Ghosts die
 int Invincible = 0;					//Check for invincibility
 int Food = 0;						//Number of pellets left in level
 int Level[39][38] = { 0 };				//Main level array
@@ -172,14 +172,14 @@ int display_manual(void)
 
 void CheckCollision() {
 	int a = 0;
-	for(a = 0; a < 7; a++) {
+	for(a = 0; a < 8; a++) {
 		//Collision
-		if((Loc[a][0] == Loc[7][0]) && (Loc[a][1] == Loc[7][1])) {
+		if((Loc[a][0] == Loc[8][0]) && (Loc[a][1] == Loc[8][1])) {
 
 			//Ghost dies
 			if(Invincible == 1) {
 				Points = Points + GhostsInARow * 20;
-				mvwprintw(win, Loc[7][0], Loc[7][1] - 1, "%d", (GhostsInARow * 20));
+				mvwprintw(win, Loc[8][0], Loc[8][1] - 1, "%d", (GhostsInARow * 20));
 				GhostsInARow *= 2;
 				wrefresh(win);
 
@@ -191,7 +191,7 @@ void CheckCollision() {
 			//Pacman dies
 			else {
 				wattron(win, COLOR_PAIR(Pacman));
-				mvwprintw(win, Loc[7][0], Loc[7][1], "X");
+				mvwprintw(win, Loc[8][0], Loc[8][1], "X");
 
 				wrefresh(win);
 
@@ -201,7 +201,7 @@ void CheckCollision() {
 				if(Lives == -1) ExitProgram(END_MSG);
 
 				//Reset level
-				for(a = 0; a < 8; a++) {
+				for(a = 0; a < 9; a++) {
 					Loc[a][0] = StartingPoints[a][0];
 					Loc[a][1] = StartingPoints[a][1];
 				}
@@ -213,6 +213,7 @@ void CheckCollision() {
 				Dir[5][0] =  1; Dir[5][1] =  0;
 				Dir[6][0] = -1; Dir[6][1] =  0;
 				Dir[7][0] =  0; Dir[7][1] = -1;
+				Dir[8][0] =  0; Dir[8][1] =  1;
 
 				DrawWindow();
 
@@ -288,6 +289,7 @@ void DrawWindow() {
 		wattron(win, COLOR_PAIR(Ghost5)); mvwaddch(win, Loc[4][0], Loc[4][1], '&');																	 
 		wattron(win, COLOR_PAIR(Ghost6)); mvwaddch(win, Loc[5][0], Loc[5][1], '&');	
 		wattron(win, COLOR_PAIR(Ghost7)); mvwaddch(win, Loc[6][0], Loc[6][1], '&');	
+		wattron(win, COLOR_PAIR(Ghost8)); mvwaddch(win, Loc[7][0], Loc[7][1], '&');	
 	}
 
 	//OR display vulnerable ghosts
@@ -300,10 +302,11 @@ void DrawWindow() {
 		mvwaddch(win, Loc[4][0], Loc[4][1], tleft + '0');
 		mvwaddch(win, Loc[5][0], Loc[5][1], tleft + '0');
 		mvwaddch(win, Loc[6][0], Loc[6][1], tleft + '0');
+		mvwaddch(win, Loc[7][0], Loc[6][1], tleft + '0');
 	}
 
 	//Display Pacman
-	wattron(win, COLOR_PAIR(Pacman)); mvwaddch(win, Loc[7][0], Loc[7][1], 'C');
+	wattron(win, COLOR_PAIR(Pacman)); mvwaddch(win, Loc[8][0], Loc[8][1], 'C');
 
 	wrefresh(win);
 }
@@ -326,27 +329,27 @@ void GetInput() {
 
 	switch (ch) {
 		case KEY_UP:    case 'w': case 'W':
-			if((Level[(Loc[7][0]-1) % 39][Loc[7][1]] != 1)
-			&& (Level[(Loc[7][0]-1) % 39][Loc[7][1]] != 7))
-				{ Dir[7][0] = -1; Dir[7][1] =  0; }
+			if((Level[(Loc[8][0]-1) % 39][Loc[8][1]] != 1)
+			&& (Level[(Loc[8][0]-1) % 39][Loc[8][1]] != 8))
+				{ Dir[8][0] = -1; Dir[8][1] =  0; }
 			break;
 
 		case KEY_DOWN:  case 's': case 'S':
-			if((Level[(Loc[7][0]+1) % 39][Loc[7][1]] != 1)
-			&& (Level[(Loc[7][0]+1) % 39][Loc[7][1]] != 7))
-				{ Dir[7][0] =  1; Dir[7][1] =  0; }
+			if((Level[(Loc[8][0]+1) % 39][Loc[8][1]] != 1)
+			&& (Level[(Loc[8][0]+1) % 39][Loc[8][1]] != 8))
+				{ Dir[8][0] =  1; Dir[8][1] =  0; }
 			break;
 
 		case KEY_LEFT:  case 'a': case 'A':
-			if((Level[Loc[7][0]][(Loc[7][1]-1) % 38] != 1)
-			&& (Level[Loc[7][0]][(Loc[7][1]-1) % 38] != 7))
-				{ Dir[7][0] =  0; Dir[7][1] = -1; }
+			if((Level[Loc[8][0]][(Loc[8][1]-1) % 38] != 1)
+			&& (Level[Loc[8][0]][(Loc[8][1]-1) % 38] != 8))
+				{ Dir[8][0] =  0; Dir[8][1] = -1; }
 			break;
 
 		case KEY_RIGHT: case 'd': case 'D':
-			if((Level[Loc[7][0]][(Loc[7][1]+1) % 38] != 1)
-			&& (Level[Loc[7][0]][(Loc[7][1]+1) % 38] != 7))
-				{ Dir[7][0] =  0; Dir[7][1] =  1; }
+			if((Level[Loc[8][0]][(Loc[8][1]+1) % 38] != 1)
+			&& (Level[Loc[8][0]][(Loc[8][1]+1) % 38] != 8))
+				{ Dir[8][0] =  0; Dir[8][1] =  1; }
 			break;
 
 		case 'p': case 'P':
@@ -383,6 +386,7 @@ void InitCurses() {
 	init_pair(Ghost5,    COLOR_RED,     COLOR_BLACK);											   
 	init_pair(Ghost6,    COLOR_CYAN,    COLOR_BLACK);
 	init_pair(Ghost7,    COLOR_MAGENTA, COLOR_BLACK);
+	init_pair(Ghost8,    COLOR_YELLOW,  COLOR_BLACK);
 	init_pair(BlueGhost, COLOR_BLUE,    COLOR_RED);
 	init_pair(Pacman,    COLOR_YELLOW,  COLOR_BLACK);
 }
@@ -424,6 +428,7 @@ void IntroScreen() {
 		wattron(win, COLOR_PAIR(Ghost5)); mvwprintw(win, 13, a-3, " &");
 		wattron(win, COLOR_PAIR(Ghost6)); mvwprintw(win, 13, a-5, " &");
 		wattron(win, COLOR_PAIR(Ghost7)); mvwprintw(win, 13, a-7, " &");
+		wattron(win, COLOR_PAIR(Ghost8)); mvwprintw(win, 13, a-9, " &");
 		wrefresh(win);
 		usleep(100000);
 	}
@@ -446,6 +451,7 @@ void IntroScreen() {
 		wattron(win, COLOR_PAIR(Pacman)); mvwprintw(win, 13, b-9+1, " ");
 		wattron(win, COLOR_PAIR(Pacman)); mvwprintw(win, 13, b-9+3, " ");
 		wattron(win, COLOR_PAIR(Pacman)); mvwprintw(win, 13, b-9+5, " ");
+		wattron(win, COLOR_PAIR(Pacman)); mvwprintw(win, 13, b-9+7, " ");
 		wattron(win, COLOR_PAIR(Pacman)); mvwprintw(win, 13, a-3, "C          ");
 
 		wattron(win, COLOR_PAIR(Pellet)); mvwprintw(win, 13, 23, " ");
@@ -472,6 +478,7 @@ void LoadLevel(char *levelfile) {
 	Dir[5][0] =  1; Dir[5][1] =  0;
 	Dir[6][0] = -1; Dir[6][1] =  0;
 	Dir[7][0] =  0; Dir[7][1] = -1;
+	Dir[8][0] =  0; Dir[8][1] =  1;
 
 	//Open file
 	fin = fopen(levelfile, "r");
@@ -499,13 +506,14 @@ void LoadLevel(char *levelfile) {
 			if(Level[a][b] == 10) { Loc[5][0] = a; Loc[5][1] = b; Level[a][b] = 0; }
 			if(Level[a][b] == 11) { Loc[6][0] = a; Loc[6][1] = b; Level[a][b] = 0; }
 			if(Level[a][b] == 12) { Loc[7][0] = a; Loc[7][1] = b; Level[a][b] = 0; }
+			if(Level[a][b] == 13) { Loc[8][0] = a; Loc[8][1] = b; Level[a][b] = 0; }
 		}
 	}
 
 	fscanf(fin, "%d", &LevelNumber);
 
 	//Save initial character points for if Pacman or Ghosts die
-	for(a = 0; a < 8; a++)
+	for(a = 0; a < 9; a++)
 		StartingPoints[a][0] = Loc[a][0], StartingPoints[a][1] = Loc[a][1];
 
 }
@@ -546,7 +554,7 @@ void MoveGhosts() {
 	if((Invincible == 0) || SlowerGhosts < HowSlow)
 
 	//Loop through each ghost
-	for(a = 0; a < 7; a++) {
+	for(a = 0; a < 8; a++) {
 
 		//Switch sides?
 		     if((Loc[a][0] ==  0) && (Dir[a][0] == -1)) Loc[a][0] = 38;
@@ -587,18 +595,18 @@ void MoveGhosts() {
 			else {
 				if(Invincible == 0) {
 				//Chase Pacman
-				     if((Loc[7][0] > Loc[a][0]) && (checksides[0] == 1)) { Dir[a][0] =  1; Dir[a][1] =  0; c = 1; }
-				else if((Loc[7][0] < Loc[a][0]) && (checksides[1] == 1)) { Dir[a][0] = -1; Dir[a][1] =  0; c = 1; }
-				else if((Loc[7][1] > Loc[a][1]) && (checksides[2] == 1)) { Dir[a][0] =  0; Dir[a][1] =  1; c = 1; }
-				else if((Loc[7][1] < Loc[a][1]) && (checksides[3] == 1)) { Dir[a][0] =  0; Dir[a][1] = -1; c = 1; }
+				     if((Loc[8][0] > Loc[a][0]) && (checksides[0] == 1)) { Dir[a][0] =  1; Dir[a][1] =  0; c = 1; }
+				else if((Loc[8][0] < Loc[a][0]) && (checksides[1] == 1)) { Dir[a][0] = -1; Dir[a][1] =  0; c = 1; }
+				else if((Loc[8][1] > Loc[a][1]) && (checksides[2] == 1)) { Dir[a][0] =  0; Dir[a][1] =  1; c = 1; }
+				else if((Loc[8][1] < Loc[a][1]) && (checksides[3] == 1)) { Dir[a][0] =  0; Dir[a][1] = -1; c = 1; }
 				}
 
 				else {
 				//Run away from Pacman
-				     if((Loc[7][0] > Loc[a][0]) && (checksides[1] == 1)) { Dir[a][0] = -1; Dir[a][1] =  0; c = 1; }
-				else if((Loc[7][0] < Loc[a][0]) && (checksides[0] == 1)) { Dir[a][0] =  1; Dir[a][1] =  0; c = 1; }
-				else if((Loc[7][1] > Loc[a][1]) && (checksides[3] == 1)) { Dir[a][0] =  0; Dir[a][1] = -1; c = 1; }
-				else if((Loc[7][1] < Loc[a][1]) && (checksides[2] == 1)) { Dir[a][0] =  0; Dir[a][1] =  1; c = 1; }
+				     if((Loc[8][0] > Loc[a][0]) && (checksides[1] == 1)) { Dir[a][0] = -1; Dir[a][1] =  0; c = 1; }
+				else if((Loc[8][0] < Loc[a][0]) && (checksides[0] == 1)) { Dir[a][0] =  1; Dir[a][1] =  0; c = 1; }
+				else if((Loc[8][1] > Loc[a][1]) && (checksides[3] == 1)) { Dir[a][0] =  0; Dir[a][1] = -1; c = 1; }
+				else if((Loc[8][1] < Loc[a][1]) && (checksides[2] == 1)) { Dir[a][0] =  0; Dir[a][1] =  1; c = 1; }
 				}
 			}
 
@@ -616,32 +624,32 @@ void MovePacman() {
 	static int itime = 0;
 
 	//Switch sides?
-	     if((Loc[7][0] ==  0) && (Dir[7][0] == -1)) Loc[7][0] = 38;
-	else if((Loc[7][0] == 38) && (Dir[7][0] ==  1)) Loc[7][0] =  0;
-	else if((Loc[7][1] ==  0) && (Dir[7][1] == -1)) Loc[7][1] = 37;
-	else if((Loc[7][1] == 37) && (Dir[7][1] ==  1)) Loc[7][1] =  0;
+	     if((Loc[8][0] ==  0) && (Dir[8][0] == -1)) Loc[8][0] = 38;
+	else if((Loc[8][0] == 38) && (Dir[8][0] ==  1)) Loc[8][0] =  0;
+	else if((Loc[8][1] ==  0) && (Dir[8][1] == -1)) Loc[8][1] = 37;
+	else if((Loc[8][1] == 37) && (Dir[8][1] ==  1)) Loc[8][1] =  0;
 
 	//Or
 	else {
 		//Move Pacman
-		Loc[7][0] += Dir[7][0];
-		Loc[7][1] += Dir[7][1];
+		Loc[8][0] += Dir[8][0];
+		Loc[8][1] += Dir[8][1];
 
 		//If he hit a wall, move back
-		if((Level[Loc[7][0]][Loc[7][1]] == 1) || (Level[Loc[7][0]][Loc[7][1]] == 7)) {
-			Loc[7][0] -= Dir[7][0];	Loc[7][1] -= Dir[7][1];
+		if((Level[Loc[8][0]][Loc[8][1]] == 1) || (Level[Loc[8][0]][Loc[8][1]] == 8)) {
+			Loc[8][0] -= Dir[8][0];	Loc[8][1] -= Dir[8][1];
 		}
 	}
 
 	//What is he eating?
-	switch (Level[Loc[7][0]][Loc[7][1]]) {
+	switch (Level[Loc[8][0]][Loc[8][1]]) {
 		case 2:	//Pellet
-			Level[Loc[7][0]][Loc[7][1]] = 0;
+			Level[Loc[8][0]][Loc[8][1]] = 0;
 			Points++;
 			Food--;
 			break;
 		case 3:	//PowerUp
-			Level[Loc[7][0]][Loc[7][1]] = 0;
+			Level[Loc[8][0]][Loc[8][1]] = 0;
 			Invincible = 1;
 			if(GhostsInARow == 0) GhostsInARow = 1;
 			itime = time(0);
