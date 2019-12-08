@@ -187,12 +187,15 @@ int display_menu(void) //Display Menu
 		printf("\n\t\t\t\t 1) Solo ");
 		printf("\n\t\t\t\t 2) Duo ");
     printf("\n\t\t\t\t 3) Exit \n\n\n");
-		printf("\n\n\t\t\t\t  HOW TO PLAY PACMAN ");
-    printf("\n\n\t\t\t\t  HOW TO PLAY PACMAN ");
-    printf("\n\n\t\t\t\t  HOW TO PLAY PACMAN ");
-    printf("\n\n\t\t\t\t  HOW TO PLAY PACMAN ");
-    printf("\n\n\t\t\t\t  HOW TO PLAY PACMAN \n");
-   
+		printf("\n\n\t\t\t  HOW TO PLAY PACMAN ");
+    printf("\n\n\t\t\t  Press 1 to Play Solo");
+    printf("\n\n\t\t\t  Press 2 to Play Duo");
+    printf("\n\n\t\t\t  Solo : W, A, S, D or UP, LEFT, DOWN, RIGHT ");
+    printf("\n\n\t\t\t  Duo : 1P : W, A, S, D ");
+    printf("\n\n\t\t\t        2P : UP, LEFT, DOWN, RIGHT");
+    printf("\n\n\t\t\t  When you eat *, you can get invincible mode");
+    printf("\n\n\t\t\t  And you can take ghost.");
+    printf("\n\n\t\t\t  ENJOY!!!\n");
    
 		scanf("%d",&menu);
    
