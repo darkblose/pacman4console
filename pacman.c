@@ -72,13 +72,13 @@ int GhostsInARow = 0;					//Keep track of how many points to give for eating gho
 int tleft = 0;						//How long left for invincibility
 int menu = 1;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) 
+{
 
-	
-  
 	while(menu)
 	{
 		menu = display_menu();
+   
 		if(menu == 1)
 		{
 			int j = 0;
@@ -105,8 +105,11 @@ int main(int argc, char *argv[]) {
 				j = 1;
 				//They want to start at a level 1-9
 				if(argc > 1)
-					for(LevelNumber = '1'; LevelNumber <= '9'; LevelNumber++)
-						if(LevelNumber == argv[1][0]) j = LevelNumber - '0';											  
+        {
+          for(LevelNumber = '1'; LevelNumber <= '9'; LevelNumber++)
+          {
+            if(LevelNumber == argv[1][0]) j = LevelNumber - '0';			
+          }								  
 					//Load 9 levels, 1 by 1, if you can beat all 9 levels in a row, you're awesome
 					for(LevelNumber = j; LevelNumber < 10; LevelNumber++) 
 					{
@@ -115,8 +118,10 @@ int main(int argc, char *argv[]) {
 						LoadLevel(LevelFile);
 						Invincible = 0;			//Reset invincibility
 					}
+        }
 			}
 		}
+   
 		else if (menu == 2)
 		{
 			int j = 0;
@@ -143,8 +148,11 @@ int main(int argc, char *argv[]) {
 				j = 1;
 				//They want to start at a level 1-9
 				if(argc > 1)
+        {
 					for(LevelNumber = '1'; LevelNumber <= '9'; LevelNumber++)
-						if(LevelNumber == argv[1][0]) j = LevelNumber - '0';											  
+          {
+						if(LevelNumber == argv[1][0]) j = LevelNumber - '0';	
+          }										  
 					//Load 9 levels, 1 by 1, if you can beat all 9 levels in a row, you're awesome
 					for(LevelNumber = j; LevelNumber < 10; LevelNumber++) 
 					{
@@ -153,8 +161,10 @@ int main(int argc, char *argv[]) {
 						LoadLevel2(LevelFile);
 						Invincible2 = 0;			//Reset invincibility
 					}
+        }
 			}
 		}
+   
 		else if (menu == 3)
 		{
 			exit(0);
@@ -163,8 +173,7 @@ int main(int argc, char *argv[]) {
 	ExitProgram(EXIT_MSG);	  
 }
 
-//硫붾돱異붽?
-int display_menu(void)
+int display_menu(void) //Display Menu
 {
 	int menu = 0;
 
@@ -184,6 +193,7 @@ int display_menu(void)
     printf("\n\n\t\t\t\t  HOW TO PLAY PACMAN ");
     printf("\n\n\t\t\t\t  HOW TO PLAY PACMAN \n");
    
+   
 		scanf("%d",&menu);
    
 		if(menu < 1 || menu > 3)
@@ -198,14 +208,19 @@ int display_menu(void)
 	return 0;
 }
 
-void CheckCollision() {
+void CheckCollision() 
+{
 	int a = 0;
-	for(a = 0; a < 8; a++) {
+ 
+	for(a = 0; a < 8; a++) 
+  {
 		//Collision
-		if((Loc[a][0] == Loc[8][0]) && (Loc[a][1] == Loc[8][1])) {
+		if((Loc[a][0] == Loc[8][0]) && (Loc[a][1] == Loc[8][1])) 
+    {
 
 			//Ghost dies
-			if(Invincible == 1) {
+			if(Invincible == 1) 
+      {
 				Points = Points + GhostsInARow * 20;
 				mvwprintw(win, Loc[8][0], Loc[8][1] - 1, "%d", (GhostsInARow * 20));
 				GhostsInARow *= 2;
@@ -217,7 +232,8 @@ void CheckCollision() {
 			}
 
 			//Pacman dies
-			else {
+			else 
+      {
 				wattron(win, COLOR_PAIR(Pacman));
 				mvwprintw(win, Loc[8][0], Loc[8][1], "X");
 
@@ -229,7 +245,8 @@ void CheckCollision() {
 				if(Lives == -1) ExitProgram(END_MSG);
 
 				//Reset level
-				for(a = 0; a < 9; a++) {
+				for(a = 0; a < 9; a++) 
+        {
 					Loc[a][0] = StartingPoints[a][0];
 					Loc[a][1] = StartingPoints[a][1];
 				}
@@ -251,10 +268,12 @@ void CheckCollision() {
 	}
 }
 
-void CheckScreenSize() {
-        //Make sure the window is big enough
+void CheckScreenSize() 
+{
         int h, w; getmaxyx(stdscr, h, w);
-        if((h < 32) || (w < 29)) {
+        
+        if((h < 32) || (w < 29)) 
+        {
                 endwin();
                 fprintf(stderr, "\nSorry.\n");
                 fprintf(stderr, "To play Pacman for Console, your console window must be at least 32x29\n");
@@ -263,31 +282,38 @@ void CheckScreenSize() {
         }
 }
 
-void CreateWindows(int y, int x, int y0, int x0) {
+void CreateWindows(int y, int x, int y0, int x0) 
+{
 	win = newwin(y, x, y0, x0);
 	status = newwin(3, 37, 39, 1);
 }
 
-void Delay() {
+void Delay() 
+{
 
 	struct timeb t_start, t_current;
 	ftime(&t_start);
 
 	//Slow down the game a little bit
-	do {
+	do 
+  {
 		GetInput();
 		ftime(&t_current);
-	} while (abs(t_start.millitm - t_current.millitm) < SpeedOfGame);
+	} 
+  while (abs(t_start.millitm - t_current.millitm) < SpeedOfGame);
 }
 
-void DrawWindow() {
+void DrawWindow() 
+{
 	int a = 0; int b = 0;
 	char chr = ' ';
 	int attr;
 
 	//Display level array
-	for(a = 0; a < 39; a++) for(b = 0; b < 38; b++) {
-		switch(Level[a][b]) {
+	for(a = 0; a < 39; a++) for(b = 0; b < 38; b++) 
+  {
+		switch(Level[a][b]) 
+    {
 		case 0: chr = ' '; attr = A_NORMAL; wattron(win, COLOR_PAIR(Normal));    break;
 		case 1: chr = ' '; attr = A_NORMAL; wattron(win, COLOR_PAIR(Wall));      break;
 		case 2: chr = '.'; attr = A_NORMAL; wattron(win, COLOR_PAIR(Pellet));    break;
@@ -302,14 +328,17 @@ void DrawWindow() {
 	wmove(status, 1, 1);
 	wattron(status, COLOR_PAIR(Pacman));
 	for(a = 0; a < Lives; a++)
-		wprintw(status, "C ");
+  {
+    wprintw(status, "C ");
+  }
 	wprintw(status, "  ");
 	wattron(status, COLOR_PAIR(Normal));
 	mvwprintw(status, 2, 2, "Level: %d     Score: %d ", LevelNumber, Points);
 	wrefresh(status);
 
 	//Display ghosts
-	if(Invincible == 0) {
+	if(Invincible == 0) 
+  {
 		wattron(win, COLOR_PAIR(Ghost1)); mvwaddch(win, Loc[0][0], Loc[0][1], '&');
 		wattron(win, COLOR_PAIR(Ghost2)); mvwaddch(win, Loc[1][0], Loc[1][1], '&');
 		wattron(win, COLOR_PAIR(Ghost3)); mvwaddch(win, Loc[2][0], Loc[2][1], '&');
@@ -321,7 +350,8 @@ void DrawWindow() {
 	}
 
 	//OR display vulnerable ghosts
-	else {
+	else 
+  {
 		wattron(win, COLOR_PAIR(BlueGhost));
 		mvwaddch(win, Loc[0][0], Loc[0][1], tleft + '0');
 		mvwaddch(win, Loc[1][0], Loc[1][1], tleft + '0');
@@ -331,12 +361,11 @@ void DrawWindow() {
 		mvwaddch(win, Loc[5][0], Loc[5][1], tleft + '0');
 		mvwaddch(win, Loc[6][0], Loc[6][1], tleft + '0');
 		mvwaddch(win, Loc[7][0], Loc[7][1], tleft + '0');
-
-
 	}
 
 	//Display Pacman
-	wattron(win, COLOR_PAIR(Pacman)); mvwaddch(win, Loc[8][0], Loc[8][1], 'C');
+	wattron(win, COLOR_PAIR(Pacman)); 
+  mvwaddch(win, Loc[8][0], Loc[8][1], 'C');
 
 	wrefresh(win);
 }
@@ -348,7 +377,8 @@ void ExitProgram(const char *message)
 	exit(0);
 }
 
-void GetInput() {
+void GetInput() 
+{
 	int ch;
 	static int chtmp;
 
@@ -358,7 +388,8 @@ void GetInput() {
 	if(ch == ERR) ch = chtmp;
 	chtmp = ch;
 
-	switch (ch) {
+	switch (ch) 
+  {
 		case KEY_UP:    case 'w': case 'W':
 			if((Level[(Loc[8][0]-1) % 39][Loc[8][1]] != 1)
 			&& (Level[(Loc[8][0]-1) % 39][Loc[8][1]] != 8))
@@ -395,7 +426,8 @@ void GetInput() {
 	}
 }
 
-void InitCurses() {
+void InitCurses() 
+{
 	initscr();
 	start_color();
 	curs_set(0);
@@ -423,7 +455,8 @@ void InitCurses() {
   init_pair(Pacman2,    COLOR_YELLOW,  COLOR_BLACK);
 }
 
-void IntroScreen() {
+void IntroScreen() 
+{
 	int a = 0;
 	int b = 23;
 
@@ -434,7 +467,8 @@ void IntroScreen() {
 	mvwprintw(win, 20, 8, "Press any key...");
 
 	//Scroll Pacman to middle of screen
-	for(a = 0; a < 13; a++) {
+	for(a = 0; a < 13; a++) 
+  {
 		if(getch()!=ERR) return;
 		wattron(win, COLOR_PAIR(Pacman));
 		mvwprintw(win, 8, a, " C");
@@ -449,7 +483,8 @@ void IntroScreen() {
 	usleep(1000000);
 
 	//Ghosts Chase Pacman
-	for(a = 0; a < 23; a++) {
+	for(a = 0; a < 23; a++) 
+  {
 		if(getch()!=ERR) return;
 		wattron(win, COLOR_PAIR(Pellet)); mvwprintw(win, 13, 23, "*");
 		wattron(win, COLOR_PAIR(Pacman)); mvwprintw(win, 13, a, " C");
@@ -465,7 +500,8 @@ void IntroScreen() {
 	usleep(150000);
 
 	//Pacman Chases Ghosts
-	for(a = 25; a > 2; a--) {
+	for(a = 25; a > 2; a--) 
+  {
 		if(getch()!=ERR) return;
 		wattron(win, COLOR_PAIR(Pellet)); mvwprintw(win, 13, 23, " ");
 
@@ -486,10 +522,10 @@ void IntroScreen() {
 		wrefresh(win);
 		usleep(100000);
 	}
-
 }
 
-void LoadLevel(char *levelfile) {
+void LoadLevel(char *levelfile) 
+{
 
 	int a = 0; int b = 0;
 	size_t l;
@@ -512,20 +548,25 @@ void LoadLevel(char *levelfile) {
 	fin = fopen(levelfile, "r");
 
 	//Make sure it didn't fail
-	if(!(fin)) {
+	if(!(fin)) 
+  {
 		l = sizeof(error)-strlen(error)-1;
 		strncat(error, levelfile, l);
 		if(strlen(levelfile) > l)
+    {
 			error[sizeof(error)-2] = '.', error[sizeof(error)-3] = '.', error[sizeof(error)-4] = '.';
+    }
 		ExitProgram(error);
 	}
 
 	//Open file and load the level into the array
-	for(a = 0; a < 39; a++) {
-		for(b = 0; b < 38; b++) {
+	for(a = 0; a < 39; a++) 
+  {
+		for(b = 0; b < 38; b++) 
+    {
 			fscanf(fin, "%d", &Level[a][b]);
+      
 			if(Level[a][b] == 2) Food++;
-
 			if(Level[a][b] ==  5) { Loc[0][0] = a; Loc[0][1] = b; Level[a][b] = 0; }
 			if(Level[a][b] ==  6) { Loc[1][0] = a; Loc[1][1] = b; Level[a][b] = 0; }
 			if(Level[a][b] ==  7) { Loc[2][0] = a; Loc[2][1] = b; Level[a][b] = 0; }
@@ -542,38 +583,46 @@ void LoadLevel(char *levelfile) {
 
 	//Save initial character points for if Pacman or Ghosts die
 	for(a = 0; a < 9; a++)
+  {
 		StartingPoints[a][0] = Loc[a][0], StartingPoints[a][1] = Loc[a][1];
+  }
 
 }
 
-void MainLoop() {
 
+
+void MainLoop() 
+{
 	DrawWindow();
 	wrefresh(win);
 	wrefresh(status);
 	usleep(1000000);
 
-	do {
+	do 
+  {
 		MovePacman();	DrawWindow();	CheckCollision();
 		MoveGhosts();	DrawWindow();	CheckCollision();
 		if(Points > FreeLife) { Lives++; FreeLife *= 2;}
 		Delay();
-
-	} while (Food > 0);
+	}
+   
+  while (Food > 0);
 
 	DrawWindow();
 	usleep(1000000);
-
+ 
 }
 
-void MoveGhosts() {
+void MoveGhosts() 
+{
 	int a = 0; int b = 0; int c = 0;
 	int tmpx = 0;  int tmpy = 0;
 	int tmpdx = 0; int tmpdy = 0;
 	int checksides[] = { 0, 0, 0, 0, 0, 0 };
 	static int SlowerGhosts = 0;
 
-	if(Invincible == 1) {
+	if(Invincible == 1) 
+  {
 		SlowerGhosts++;
 		if(SlowerGhosts > HowSlow)
 			SlowerGhosts = 0;
@@ -582,72 +631,80 @@ void MoveGhosts() {
 	if((Invincible == 0) || SlowerGhosts < HowSlow)
 
 	//Loop through each ghost
-	for(a = 0; a < 8; a++) {
+	for(a = 0; a < 8; a++)
+  {
 
 		//Switch sides?
 		     if((Loc[a][0] ==  0) && (Dir[a][0] == -1)) Loc[a][0] = 38;
 		else if((Loc[a][0] == 38) && (Dir[a][0] ==  1)) Loc[a][0] =  0;
 		else if((Loc[a][1] ==  0) && (Dir[a][1] == -1)) Loc[a][1] = 37;
 		else if((Loc[a][1] == 37) && (Dir[a][1] ==  1)) Loc[a][1] =  0;
-		else {
+		else 
+    {
+      b = 0;
+      //Determine which directions we can go
+      for(b = 0; b < 4; b++) checksides[b] = 0;
+      if(Level[Loc[a][0] - 1][Loc[a][1]] != 1) checksides[1] = 1;
+      if(Level[Loc[a][0] + 1][Loc[a][1]] != 1) checksides[0] = 1;
+      if(Level[Loc[a][0]][Loc[a][1] + 1] != 1) checksides[2] = 1;
+      if(Level[Loc[a][0]][Loc[a][1] - 1] != 1) checksides[3] = 1;
 
-		b = 0;
-		//Determine which directions we can go
-		for(b = 0; b < 4; b++) checksides[b] = 0;
-		if(Level[Loc[a][0] + 1][Loc[a][1]] != 1) checksides[0] = 1;
-		if(Level[Loc[a][0] - 1][Loc[a][1]] != 1) checksides[1] = 1;
-		if(Level[Loc[a][0]][Loc[a][1] + 1] != 1) checksides[2] = 1;
-		if(Level[Loc[a][0]][Loc[a][1] - 1] != 1) checksides[3] = 1;
+      //Don't do 180 unless we have to
+		  c = 0; for(b = 0; b < 4; b++) if(checksides[b] == 1) c++;
 
-		//Don't do 180 unless we have to
-		c = 0; for(b = 0; b < 4; b++) if(checksides[b] == 1) c++;
+		  if(c > 1) 
+      {
+			       if(Dir[a][0] ==  1) checksides[1] = 0;
+			  else if(Dir[a][0] == -1) checksides[0] = 0;
+		  	else if(Dir[a][1] ==  1) checksides[3] = 0;
+			  else if(Dir[a][1] == -1) checksides[2] = 0;
+		  }
 
-		if(c > 1) {
-			     if(Dir[a][0] ==  1) checksides[1] = 0;
-			else if(Dir[a][0] == -1) checksides[0] = 0;
-			else if(Dir[a][1] ==  1) checksides[3] = 0;
-			else if(Dir[a][1] == -1) checksides[2] = 0;
-		}
+		  c = 0;
+		  do 
+      {
+		  	//Decide direction
+		  	b = (int)(rand() / (1625000000 / 4));
 
-		c = 0;
-		do {
-			//Decide direction
-			b = (int)(rand() / (1625000000 / 4));
+		  	if(checksides[b] == 1) 
+        {
+			  	     if(b == 0) { Dir[a][0] =  1; Dir[a][1] =  0; }
+			  	else if(b == 1) { Dir[a][0] = -1; Dir[a][1] =  0; }
+		  		else if(b == 2) { Dir[a][0] =  0; Dir[a][1] =  1; }
+		  		else if(b == 3) { Dir[a][0] =  0; Dir[a][1] = -1; }
+		  	}
+		  	else 
+        {
+  				if(Invincible == 0) 
+          {
+			  	//Chase Pacman
+			  	     if((Loc[8][0] > Loc[a][0]) && (checksides[0] == 1)) { Dir[a][0] =  1; Dir[a][1] =  0; c = 1; }
+		  		else if((Loc[8][0] < Loc[a][0]) && (checksides[1] == 1)) { Dir[a][0] = -1; Dir[a][1] =  0; c = 1; }
+		  		else if((Loc[8][1] > Loc[a][1]) && (checksides[2] == 1)) { Dir[a][0] =  0; Dir[a][1] =  1; c = 1; }
+			  	else if((Loc[8][1] < Loc[a][1]) && (checksides[3] == 1)) { Dir[a][0] =  0; Dir[a][1] = -1; c = 1; }
+				  }
 
-			if(checksides[b] == 1) {
-				     if(b == 0) { Dir[a][0] =  1; Dir[a][1] =  0; }
-				else if(b == 1) { Dir[a][0] = -1; Dir[a][1] =  0; }
-				else if(b == 2) { Dir[a][0] =  0; Dir[a][1] =  1; }
-				else if(b == 3) { Dir[a][0] =  0; Dir[a][1] = -1; }
-			}
-			else {
-				if(Invincible == 0) {
-				//Chase Pacman
-				     if((Loc[8][0] > Loc[a][0]) && (checksides[0] == 1)) { Dir[a][0] =  1; Dir[a][1] =  0; c = 1; }
-				else if((Loc[8][0] < Loc[a][0]) && (checksides[1] == 1)) { Dir[a][0] = -1; Dir[a][1] =  0; c = 1; }
-				else if((Loc[8][1] > Loc[a][1]) && (checksides[2] == 1)) { Dir[a][0] =  0; Dir[a][1] =  1; c = 1; }
-				else if((Loc[8][1] < Loc[a][1]) && (checksides[3] == 1)) { Dir[a][0] =  0; Dir[a][1] = -1; c = 1; }
-				}
+				  else 
+          {
+			  	//Run away from Pacman
+				       if((Loc[8][0] > Loc[a][0]) && (checksides[1] == 1)) { Dir[a][0] = -1; Dir[a][1] =  0; c = 1; }
+			  	else if((Loc[8][0] < Loc[a][0]) && (checksides[0] == 1)) { Dir[a][0] =  1; Dir[a][1] =  0; c = 1; }
+			  	else if((Loc[8][1] > Loc[a][1]) && (checksides[3] == 1)) { Dir[a][0] =  0; Dir[a][1] = -1; c = 1; }
+			  	else if((Loc[8][1] < Loc[a][1]) && (checksides[2] == 1)) { Dir[a][0] =  0; Dir[a][1] =  1; c = 1; }
+			  	}
+		  	}
+		  } 
+      while ((checksides[b] == 0) && (c == 0));
 
-				else {
-				//Run away from Pacman
-				     if((Loc[8][0] > Loc[a][0]) && (checksides[1] == 1)) { Dir[a][0] = -1; Dir[a][1] =  0; c = 1; }
-				else if((Loc[8][0] < Loc[a][0]) && (checksides[0] == 1)) { Dir[a][0] =  1; Dir[a][1] =  0; c = 1; }
-				else if((Loc[8][1] > Loc[a][1]) && (checksides[3] == 1)) { Dir[a][0] =  0; Dir[a][1] = -1; c = 1; }
-				else if((Loc[8][1] < Loc[a][1]) && (checksides[2] == 1)) { Dir[a][0] =  0; Dir[a][1] =  1; c = 1; }
-				}
-			}
-
-		} while ((checksides[b] == 0) && (c == 0));
-
-		//Move Ghost
-		Loc[a][0] += Dir[a][0];
-		Loc[a][1] += Dir[a][1];
+		  //Move Ghost
+		  Loc[a][0] += Dir[a][0];
+		  Loc[a][1] += Dir[a][1];
 		}
 	}
 }
 
-void MovePacman() {
+void MovePacman() 
+{
 
 	static int itime = 0;
 
@@ -656,21 +713,22 @@ void MovePacman() {
 	else if((Loc[8][0] == 38) && (Dir[8][0] ==  1)) Loc[8][0] =  0;
 	else if((Loc[8][1] ==  0) && (Dir[8][1] == -1)) Loc[8][1] = 37;
 	else if((Loc[8][1] == 37) && (Dir[8][1] ==  1)) Loc[8][1] =  0;
-
-	//Or
-	else {
+	else 
+  {
 		//Move Pacman
 		Loc[8][0] += Dir[8][0];
 		Loc[8][1] += Dir[8][1];
 
 		//If he hit a wall, move back
-		if((Level[Loc[8][0]][Loc[8][1]] == 1) || (Level[Loc[8][0]][Loc[8][1]] == 8)) {
+		if((Level[Loc[8][0]][Loc[8][1]] == 1) || (Level[Loc[8][0]][Loc[8][1]] == 8)) 
+    {
 			Loc[8][0] -= Dir[8][0];	Loc[8][1] -= Dir[8][1];
 		}
-	}
+  }
 
 	//What is he eating?
-	switch (Level[Loc[8][0]][Loc[8][1]]) {
+	switch (Level[Loc[8][0]][Loc[8][1]]) 
+  {
 		case 2:	//Pellet
 			Level[Loc[8][0]][Loc[8][1]] = 0;
 			Points++;
@@ -684,11 +742,12 @@ void MovePacman() {
 			break;
 	}
 
-	//Is he invincible?
 	if(Invincible == 1)  tleft = (11 - LevelNumber - time(0) + itime);
 
-	//Is invincibility up yet?
-	if(tleft < 0) { Invincible = 0; GhostsInARow = 0; tleft = 0; }
+	if(tleft < 0) 
+  { 
+    Invincible = 0; GhostsInARow = 0; tleft = 0; 
+  }
 
 }
 
@@ -715,6 +774,7 @@ void PauseGame()
 void CheckCollision2() 
 {
 	int a = 0;
+ 
 	for(a = 0; a < 8; a++) 
   {
 		//Collision
@@ -824,26 +884,31 @@ void CheckCollision2()
 	}
 }
 
-void Delay2() {
+void Delay2() 
+{
 
 	struct timeb t_start, t_current;
 	ftime(&t_start);
 
 	//Slow down the game a little bit
-	do {
+	do 
+  {
 		GetInput2();
 		ftime(&t_current);
 	} while (abs(t_start.millitm - t_current.millitm) < SpeedOfGame);
 }
 
-void DrawWindow2() {
+void DrawWindow2() 
+{
 	int a = 0; int b = 0;
 	char chr = ' ';
 	int attr;
 
 	//Display level array
-	for(a = 0; a < 39; a++) for(b = 0; b < 38; b++) {
-		switch(Level[a][b]) {
+	for(a = 0; a < 39; a++) for(b = 0; b < 38; b++) 
+  {
+		switch(Level[a][b]) 
+    {
 		case 0: chr = ' '; attr = A_NORMAL; wattron(win, COLOR_PAIR(Normal));    break;
 		case 1: chr = ' '; attr = A_NORMAL; wattron(win, COLOR_PAIR(Wall));      break;
 		case 2: chr = '.'; attr = A_NORMAL; wattron(win, COLOR_PAIR(Pellet));    break;
@@ -858,14 +923,17 @@ void DrawWindow2() {
 	wmove(status, 1, 1);
 	wattron(status, COLOR_PAIR(Pacman));
 	for(a = 0; a < Lives; a++)
+  {
 		wprintw(status, "C ");
+  }
 	wprintw(status, "  ");
 	wattron(status, COLOR_PAIR(Normal));
 	mvwprintw(status, 2, 2, "Level: %d     Score: %d ", LevelNumber, Points);
 	wrefresh(status);
 
 	//Display ghosts
-	if(Invincible == 0) {
+	if(Invincible == 0) 
+  {
 		wattron(win, COLOR_PAIR(Ghost1)); mvwaddch(win, Loc[0][0], Loc[0][1], '&');
 		wattron(win, COLOR_PAIR(Ghost2)); mvwaddch(win, Loc[1][0], Loc[1][1], '&');
 		wattron(win, COLOR_PAIR(Ghost3)); mvwaddch(win, Loc[2][0], Loc[2][1], '&');
@@ -877,7 +945,8 @@ void DrawWindow2() {
 	}
 
 	//OR display vulnerable ghosts
-	else {
+	else 
+  {
 		wattron(win, COLOR_PAIR(BlueGhost));
 		mvwaddch(win, Loc[0][0], Loc[0][1], tleft + '0');
 		mvwaddch(win, Loc[1][0], Loc[1][1], tleft + '0');
@@ -887,19 +956,22 @@ void DrawWindow2() {
 		mvwaddch(win, Loc[5][0], Loc[5][1], tleft + '0');
 		mvwaddch(win, Loc[6][0], Loc[6][1], tleft + '0');
 		mvwaddch(win, Loc[7][0], Loc[7][1], tleft + '0');
-
-
 	}
 
 	//Display Pacman
-	wattron(win, COLOR_PAIR(Pacman)); mvwaddch(win, Loc[8][0], Loc[8][1], 'C');
-  wattron(win, COLOR_PAIR(Pacman2)); mvwaddch(win, Loc[9][0], Loc[9][1], 'C');
+	wattron(win, COLOR_PAIR(Pacman)); 
+  mvwaddch(win, Loc[8][0], Loc[8][1], 'C');
+  
+  wattron(win, COLOR_PAIR(Pacman2)); 
+  mvwaddch(win, Loc[9][0], Loc[9][1], 'C');
 
 	wrefresh(win);
 }
 
-void GetInput2() {
+void GetInput2() 
+{
 	int ch;
+
 	static int chtmp;
 
 	ch = getch();
@@ -908,7 +980,8 @@ void GetInput2() {
 	if(ch == ERR) ch = chtmp;
 	chtmp = ch;
 
-	switch (ch) {
+	switch (ch) 
+  {
 		case 'w': case 'W':  
 			if((Level[(Loc[8][0]-1) % 39][Loc[8][1]] != 1)
 			&& (Level[(Loc[8][0]-1) % 39][Loc[8][1]] != 8))
@@ -966,19 +1039,11 @@ void GetInput2() {
 			ExitProgram(QUIT_MSG);
 			break;
 
-		case 'p': case 'P':
-			PauseGame();
-			chtmp = getch();
-			break;
-
-		case 'q': case 'Q':
-			ExitProgram(QUIT_MSG);
-			break;
-
 	}
 }
 
-void LoadLevel2(char *levelfile) {
+void LoadLevel2(char *levelfile) 
+{
 
 	int a = 0; int b = 0;
 	size_t l;
@@ -1002,20 +1067,25 @@ void LoadLevel2(char *levelfile) {
 	fin = fopen(levelfile, "r");
 
 	//Make sure it didn't fail
-	if(!(fin)) {
+	if(!(fin)) 
+  {
 		l = sizeof(error)-strlen(error)-1;
 		strncat(error, levelfile, l);
 		if(strlen(levelfile) > l)
+    {
 			error[sizeof(error)-2] = '.', error[sizeof(error)-3] = '.', error[sizeof(error)-4] = '.';
+    }
 		ExitProgram(error);
 	}
 
 	//Open file and load the level into the array
-	for(a = 0; a < 39; a++) {
-		for(b = 0; b < 38; b++) {
+	for(a = 0; a < 39; a++) 
+  {
+		for(b = 0; b < 38; b++) 
+    {
 			fscanf(fin, "%d", &Level[a][b]);
+      
 			if(Level[a][b] == 2) Food++;
-
 			if(Level[a][b] ==  5) { Loc[0][0] = a; Loc[0][1] = b; Level[a][b] = 0; }
 			if(Level[a][b] ==  6) { Loc[1][0] = a; Loc[1][1] = b; Level[a][b] = 0; }
 			if(Level[a][b] ==  7) { Loc[2][0] = a; Loc[2][1] = b; Level[a][b] = 0; }
@@ -1033,7 +1103,33 @@ void LoadLevel2(char *levelfile) {
 
 	//Save initial character points for if Pacman or Ghosts die
 	for(a = 0; a < 10; a++)
+  {
 		StartingPoints[a][0] = Loc[a][0], StartingPoints[a][1] = Loc[a][1];
+  }
+
+}
+
+void MainLoop2() 
+{
+
+	DrawWindow2();
+	wrefresh(win);
+	wrefresh(status);
+	usleep(1000000);
+
+	do 
+  {
+		MovePacman2();	DrawWindow2();	CheckCollision2();
+		MoveGhosts();	DrawWindow2();	CheckCollision2();
+		if(Points > FreeLife) { Lives++; FreeLife *= 2;}
+		Delay2();
+
+	} 
+  
+  while (Food > 0);
+
+	DrawWindow2();
+	usleep(1000000);
 
 }
 
@@ -1108,96 +1204,4 @@ void MovePacman2()
   { 
     Invincible = 0; GhostsInARow = 0; tleft = 0; 
   }
-}
-
-void MainLoop2() {
-
-	DrawWindow2();
-	wrefresh(win);
-	wrefresh(status);
-	usleep(1000000);
-
-	do {
-		MovePacman();	DrawWindow2();	CheckCollision2();
-		MoveGhosts();	DrawWindow2();	CheckCollision2();
-		if(Points > FreeLife) { Lives++; FreeLife *= 2;}
-		Delay2();
-
-	} while (Food > 0);
-
-	DrawWindow2();
-	usleep(1000000);
-
-}
-
-void MovePacman2() 
-{
-
-	static int itime = 0;
-
-	//Switch sides?
-	     if((Loc[8][0] ==  0) && (Dir[8][0] == -1)) Loc[8][0] = 38;
-	else if((Loc[8][0] == 38) && (Dir[8][0] ==  1)) Loc[8][0] =  0;
-	else if((Loc[8][1] ==  0) && (Dir[8][1] == -1)) Loc[8][1] = 37;
-	else if((Loc[8][1] == 37) && (Dir[8][1] ==  1)) Loc[8][1] =  0;
-  else if((Loc[9][0] ==  0) && (Dir[9][0] == -1)) Loc[9][0] = 38;
-	else if((Loc[9][0] == 38) && (Dir[9][0] ==  1)) Loc[9][0] =  0;
-	else if((Loc[9][1] ==  0) && (Dir[9][1] == -1)) Loc[9][1] = 37;
-	else if((Loc[9][1] == 37) && (Dir[9][1] ==  1)) Loc[9][1] =  0;
-
-	//Or
-	else {
-		//Move Pacman
-		Loc[8][0] += Dir[8][0];
-		Loc[8][1] += Dir[8][1];
-    Loc[9][0] += Dir[9][0];
-		Loc[9][1] += Dir[9][1];
-
-		//If he hit a wall, move back
-		if((Level[Loc[8][0]][Loc[8][1]] == 1) || (Level[Loc[8][0]][Loc[8][1]] == 8))
-    {
-			Loc[8][0] -= Dir[8][0];	Loc[8][1] -= Dir[8][1];
-		}
-   	if((Level[Loc[9][0]][Loc[9][1]] == 1) || (Level[Loc[9][0]][Loc[9][1]] == 9))
-    {
-			Loc[9][0] -= Dir[9][0];	Loc[9][1] -= Dir[9][1];
-		}
-	}
-
-	//What is he eating?
-	switch (Level[Loc[8][0]][Loc[8][1]]) 
-  {
-		case 2:	//Pellet
-			Level[Loc[8][0]][Loc[8][1]] = 0;
-			Points++;
-			Food--;
-			break;
-		case 3:	//PowerUp
-			Level[Loc[8][0]][Loc[8][1]] = 0;
-			Invincible = 1;
-			if(GhostsInARow == 0) GhostsInARow = 1;
-			itime = time(0);
-			break;
-	}
-  switch (Level[Loc[9][0]][Loc[9][1]]) 
-  {
-    case 2:	//Pellet
-      Level[Loc[9][0]][Loc[9][1]] = 0;
-			Points++;
-			Food--;
-			break;
-		case 3:	//PowerUp
-			Level[Loc[9][0]][Loc[9][1]] = 0;
-			Invincible = 1;
-			if(GhostsInARow == 0) GhostsInARow = 1;
-			itime = time(0);
-			break;
-  }
-
-	//Is he invincible?
-	if(Invincible == 1)  tleft = (11 - LevelNumber - time(0) + itime);
-  if(Invincible2 == 1)  tleft = (11 - LevelNumber - time(0) + itime);
-	//Is invincibility up yet?
-	if(tleft < 0) { Invincible = 0; GhostsInARow = 0; tleft = 0; }
-
 }
