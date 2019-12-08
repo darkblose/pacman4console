@@ -878,7 +878,6 @@ void CheckCollision2()
 				Dir[5][0] = -1; Dir[5][1] =  0;
 				Dir[6][0] =  0; Dir[6][1] = -1;
 				Dir[7][0] =  0; Dir[7][1] =  1;
-				Dir[8][0] =  1; Dir[8][1] =  0;
         Dir[9][0] =  -1; Dir[9][1] =  0;
 				DrawWindow2();
 
