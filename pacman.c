@@ -909,52 +909,61 @@ void GetInput2() {
 	chtmp = ch;
 
 	switch (ch) {
-		case KEY_UP:   
+		case 'w': case 'W':  
 			if((Level[(Loc[8][0]-1) % 39][Loc[8][1]] != 1)
 			&& (Level[(Loc[8][0]-1) % 39][Loc[8][1]] != 8))
 				{ Dir[8][0] = -1; Dir[8][1] =  0; }
 			break;
 
-		case KEY_DOWN:  
+		case 's': case 'S':   
 			if((Level[(Loc[8][0]+1) % 39][Loc[8][1]] != 1)
 			&& (Level[(Loc[8][0]+1) % 39][Loc[8][1]] != 8))
 				{ Dir[8][0] =  1; Dir[8][1] =  0; }
 			break;
 
-		case KEY_LEFT:  
+		case 'a': case 'A': 
 			if((Level[Loc[8][0]][(Loc[8][1]-1) % 38] != 1)
 			&& (Level[Loc[8][0]][(Loc[8][1]-1) % 38] != 8))
 				{ Dir[8][0] =  0; Dir[8][1] = -1; }
 			break;
 
-		case KEY_RIGHT:
+		case 'd': case 'D':
 			if((Level[Loc[8][0]][(Loc[8][1]+1) % 38] != 1)
 			&& (Level[Loc[8][0]][(Loc[8][1]+1) % 38] != 8))
 				{ Dir[8][0] =  0; Dir[8][1] =  1; }
 			break;
       
-   case 'w': case 'W':
+   case KEY_UP: 
 			if((Level[(Loc[9][0]-1) % 39][Loc[9][1]] != 1)
 			&& (Level[(Loc[9][0]-1) % 39][Loc[9][1]] != 9))
 				{ Dir[9][0] = -1; Dir[9][1] =  0; }
 			break;
 
-		case 's': case 'S':
+		case KEY_DOWN:
 			if((Level[(Loc[9][0]+1) % 39][Loc[9][1]] != 1)
 			&& (Level[(Loc[9][0]+1) % 39][Loc[9][1]] != 9))
 				{ Dir[9][0] =  1; Dir[9][1] =  0; }
 			break;
 
-		case 'a': case 'A':
+		case KEY_LEFT:
 			if((Level[Loc[9][0]][(Loc[9][1]-1) % 38] != 1)
 			&& (Level[Loc[9][0]][(Loc[9][1]-1) % 38] != 9))
 				{ Dir[9][0] =  0; Dir[9][1] = -1; }
 			break;
 
-		case 'd': case 'D':
+		case KEY_RIGHT:
 			if((Level[Loc[9][0]][(Loc[9][1]+1) % 38] != 1)
 			&& (Level[Loc[9][0]][(Loc[9][1]+1) % 38] != 9))
 				{ Dir[9][0] =  0; Dir[9][1] =  1; }
+			break;
+
+		case 'p': case 'P':
+			PauseGame();
+			chtmp = getch();
+			break;
+
+		case 'q': case 'Q':
+			ExitProgram(QUIT_MSG);
 			break;
 
 		case 'p': case 'P':
