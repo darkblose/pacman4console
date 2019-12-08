@@ -16,11 +16,6 @@
 #include "pacman.h"
 #include <time.h>
 #include <unistd.h>
-//메뉴추가	헤더파일	  
-#include <signal.h>
-#include <sys/time.h>
-#include <sys/ioctl.h>
-#include <sys/types.h>
 
 #define EXIT_MSG "Good bye!"
 #define END_MSG "Game Over"
@@ -42,10 +37,6 @@ void MoveGhosts();                                  //Update Ghosts' location
 void MovePacman();                                  //Update Pacman's location
 void PauseGame();                                   //Pause
 
-//메뉴추가
-int display_menu(void);  // 메뉴를 보여줌
-int display_manual(void);   // 설명서를  띄워줌
-
 //For ncurses
 WINDOW * win;
 WINDOW * status;
@@ -65,109 +56,43 @@ int GhostsInARow = 0;					//Keep track of how many points to give for eating gho
 int tleft = 0;						//How long left for invincibility
 
 int main(int argc, char *argv[]) {
-	
-	int menu = 1;
-  
-	do
-	{
-		menu = display_menu();
-		if(menu == 1)
-		{
-			int j = 0;
-			srand( (unsigned)time( NULL ) );
-	
-			InitCurses();
-			CheckScreenSize();
-			CreateWindows(39, 38, 1, 1);
 
-			//If they specified a level to load
-			if((argc > 1) && (strlen(argv[1]) > 1)) 
-			{
-				LoadLevel(argv[1]);
-				IntroScreen();
-				MainLoop();
-			}
+	int j = 0;
+	srand( (unsigned)time( NULL ) );
+
+	InitCurses();
+	CheckScreenSize();
+	CreateWindows(39, 38, 1, 1);
+
+	//If they specified a level to load
+	if((argc > 1) && (strlen(argv[1]) > 1)) {
+		LoadLevel(argv[1]);
+		MainLoop();
+	}
         
-			//If not, display intro screen then use default levels
-			else 
-			{
-				//Show intro "movie"
-				IntroScreen();
+	//If not, display intro screen then use default levels
+	else {
+		//Show intro "movie"
+		IntroScreen();
 
-				j = 1;
-				//They want to start at a level 1-9
-				if(argc > 1)
-					for(LevelNumber = '1'; LevelNumber <= '9'; LevelNumber++)
-						if(LevelNumber == argv[1][0]) j = LevelNumber - '0';											  
-					//Load 9 levels, 1 by 1, if you can beat all 9 levels in a row, you're awesome
-					for(LevelNumber = j; LevelNumber < 10; LevelNumber++) 
-					{
-						LevelFile[strlen(LevelFile) - 6] = '0';
-						LevelFile[strlen(LevelFile) - 5] = LevelNumber + '0';
-						LoadLevel(LevelFile);
-						Invincible = 0;			//Reset invincibility
-					}
-			}
-		}
-		else if (menu == 2)
-		{
-			display_manual();
-		}
-		else if (menu == 3)
-		{
-			exit(0);
-		}
-	} while(menu==2 || menu==3);
-	ExitProgram(EXIT_MSG);	  
-}
+		j = 1;
+		//They want to start at a level 1-9
+		if(argc > 1)
+			for(LevelNumber = '1'; LevelNumber <= '9'; LevelNumber++)
+				if(LevelNumber == argv[1][0]) j = LevelNumber - '0';
 
-//메뉴추가
-int display_menu(void)
-{
-	int menu = 0;
+		//Load 9 levels, 1 by 1, if you can beat all 9 levels in a row, you're awesome
+		for(LevelNumber = j; LevelNumber < 10; LevelNumber++) {
+			LevelFile[strlen(LevelFile) - 6] = '0';
+			LevelFile[strlen(LevelFile) - 5] = LevelNumber + '0';
+			LoadLevel(LevelFile);
+			Invincible = 0;			//Reset invincibility
+			MainLoop();
+		}
 
-	while(1)
-	{
-		system("clear");
-		printf("\n\n\t\t\t      OpenSource Team Project \n");
-		printf("\n\t\t\t\t  P A C M A N \n");
-		printf("\n\t\t\t\t B589036 SHIM JAEWOO \t\n");
-		printf("\n\t\t\t\t B589051 LEE DONGHUN \t\n ");
-		printf("\n\t\t\t\t 1) Solo ");
-		printf("\n\t\t\t\t 2) Duo ");
-    printf("\n\t\t\t\t 3) Exit \n\n\n");
-		printf("\n\n\t\t\t\t  HOW TO PLAY PACMAN ");
-    printf("\n\n\t\t\t\t  HOW TO PLAY PACMAN ");
-    printf("\n\n\t\t\t\t  HOW TO PLAY PACMAN ");
-    printf("\n\n\t\t\t\t  HOW TO PLAY PACMAN ");
-    printf("\n\n\t\t\t\t  HOW TO PLAY PACMAN \n");
-   
-		scanf("%d",&menu);
-   
-		if(menu < 1 || menu > 3)
-		{
-			continue;
-		}
-		else
-		{
-			return menu;
-		}
 	}
-	return 0;
-}
 
-int display_manual(void)
-{
-	int ch;
-		printf("\n\n\t\t\t  HOW TO PLAY PACMAN ");	
-		printf("\n\n\t BACK TO THE MENU : M");
-	while(1)
-	{
-		ch = getch();
-		if(ch == 77 || ch == 109)
-			break;
-	}
-	return 0;
+	ExitProgram(EXIT_MSG);
 }
 
 void CheckCollision() {
@@ -317,26 +242,26 @@ void GetInput() {
 
 	switch (ch) {
 		case KEY_UP:    case 'w': case 'W':
-			if((Level[(Loc[4][0]-1) % 29][Loc[4][1]] != 1)
-			&& (Level[(Loc[4][0]-1) % 29][Loc[4][1]] != 4))
+			if((Level[(Loc[4][0]-1) % 39][Loc[4][1]] != 1)
+			&& (Level[(Loc[4][0]-1) % 39][Loc[4][1]] != 4))
 				{ Dir[4][0] = -1; Dir[4][1] =  0; }
 			break;
 
 		case KEY_DOWN:  case 's': case 'S':
-			if((Level[(Loc[4][0]+1) % 29][Loc[4][1]] != 1)
-			&& (Level[(Loc[4][0]+1) % 29][Loc[4][1]] != 4))
+			if((Level[(Loc[4][0]+1) % 39][Loc[4][1]] != 1)
+			&& (Level[(Loc[4][0]+1) % 39][Loc[4][1]] != 4))
 				{ Dir[4][0] =  1; Dir[4][1] =  0; }
 			break;
 
 		case KEY_LEFT:  case 'a': case 'A':
-			if((Level[Loc[4][0]][(Loc[4][1]-1) % 28] != 1)
-			&& (Level[Loc[4][0]][(Loc[4][1]-1) % 28] != 4))
+			if((Level[Loc[4][0]][(Loc[4][1]-1) % 38] != 1)
+			&& (Level[Loc[4][0]][(Loc[4][1]-1) % 38] != 4))
 				{ Dir[4][0] =  0; Dir[4][1] = -1; }
 			break;
 
 		case KEY_RIGHT: case 'd': case 'D':
-			if((Level[Loc[4][0]][(Loc[4][1]+1) % 28] != 1)
-			&& (Level[Loc[4][0]][(Loc[4][1]+1) % 28] != 4))
+			if((Level[Loc[4][0]][(Loc[4][1]+1) % 38] != 1)
+			&& (Level[Loc[4][0]][(Loc[4][1]+1) % 38] != 4))
 				{ Dir[4][0] =  0; Dir[4][1] =  1; }
 			break;
 
