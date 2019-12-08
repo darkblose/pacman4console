@@ -75,43 +75,45 @@ int menu = 1;
 int main(int argc, char *argv[]) 
 {
 
-	while(menu)
+	menu = display_menu();
+   
+	if(menu == 1)
 	{
-		menu = display_menu();
-   
-		if(menu == 1)
-		{
-			int j = 0;
-			srand( (unsigned)time( NULL ) );
+		int j = 0;
+		srand( (unsigned)time( NULL ) );
 	
-			InitCurses();
-			CheckScreenSize();
-			CreateWindows(39, 38, 1, 1);
+		InitCurses();
+		CheckScreenSize();
+		CreateWindows(39, 38, 1, 1);
 
-      IntroScreen();
-      LoadLevel("/usr/local/share/pacman/Levels/level01.dat");
-      MainLoop();		
-		}
-   
-		else if (menu == 2)
-		{
-			int j = 0;
-			srand( (unsigned)time( NULL ) );
-	
-			InitCurses();
-			CheckScreenSize();
-			CreateWindows(39, 38, 1, 1);
-      
-      IntroScreen();
-			LoadLevel2("/usr/local/share/pacman/Levels/level02.dat");
-			MainLoop2();     
-		}
-   
-		else if (menu == 3)
-		{
-			exit(0);
-		}
+		IntroScreen();
+		LoadLevel("/usr/local/share/pacman/Levels/level01.dat");
+		MainLoop();
+		LoadLevel("/usr/local/share/pacman/Levels/level02.dat");
+		MainLoop();
 	}
+	
+	else if (menu == 2)
+	{
+		int j = 0;
+		srand( (unsigned)time( NULL ) );
+	
+		InitCurses();
+		CheckScreenSize();
+		CreateWindows(39, 38, 1, 1);
+     
+		IntroScreen();
+		LoadLevel2("/usr/local/share/pacman/Levels/level11.dat");
+		MainLoop2();
+		LoadLevel2("/usr/local/share/pacman/Levels/level12.dat");
+		MainLoop2();			
+	}
+	
+	else if (menu == 3)
+	{
+		exit(0);
+	}
+	
 	ExitProgram(EXIT_MSG);	  
 }
 
