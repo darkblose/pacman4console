@@ -14,6 +14,8 @@
 #include <stdlib.h>
 #include <sys/timeb.h>
 #include "pacman.h"
+#include <time.h>
+#include <unistd.h>
 
 #define EXIT_MSG "Good bye!"
 #define END_MSG "Game Over"
@@ -48,7 +50,7 @@ int Dir[5][2] = { 0 };					//Direction of Ghosts and Pacman
 int StartingPoints[5][2] = { 0 };			//Default location in case Pacman/Ghosts die
 int Invincible = 0;					//Check for invincibility
 int Food = 0;						//Number of pellets left in level
-int Level[29][28] = { 0 };				//Main level array
+int Level[39][38] = { 0 };				//Main level array
 int LevelNumber = 0;					//What level number are we on?
 int GhostsInARow = 0;					//Keep track of how many points to give for eating ghosts
 int tleft = 0;						//How long left for invincibility
@@ -60,7 +62,7 @@ int main(int argc, char *argv[]) {
 
 	InitCurses();
 	CheckScreenSize();
-	CreateWindows(29, 28, 1, 1);
+	CreateWindows(39, 38, 1, 1);
 
 	//If they specified a level to load
 	if((argc > 1) && (strlen(argv[1]) > 1)) {
@@ -132,7 +134,7 @@ void CheckCollision() {
 				Dir[1][0] = -1; Dir[1][1] =  0;
 				Dir[2][0] =  0; Dir[2][1] = -1;
 				Dir[3][0] =  0; Dir[3][1] =  1;
-				Dir[4][0] =  0; Dir[4][1] = -1;
+				Dir[4][0] =  0; Dir[4][1] =  0;
 
 				DrawWindow();
 
@@ -156,7 +158,7 @@ void CheckScreenSize() {
 
 void CreateWindows(int y, int x, int y0, int x0) {
 	win = newwin(y, x, y0, x0);
-	status = newwin(3, 27, 29, 1);
+	status = newwin(3, 37, 39, 1);
 }
 
 void Delay() {
@@ -177,7 +179,7 @@ void DrawWindow() {
 	int attr;
 
 	//Display level array
-	for(a = 0; a < 29; a++) for(b = 0; b < 28; b++) {
+	for(a = 0; a < 39; a++) for(b = 0; b < 38; b++) {
 		switch(Level[a][b]) {
 		case 0: chr = ' '; attr = A_NORMAL; wattron(win, COLOR_PAIR(Normal));    break;
 		case 1: chr = ' '; attr = A_NORMAL; wattron(win, COLOR_PAIR(Wall));      break;
@@ -373,7 +375,7 @@ void LoadLevel(char *levelfile) {
 	Dir[1][0] = -1; Dir[1][1] =  0;
 	Dir[2][0] =  0; Dir[2][1] = -1;
 	Dir[3][0] =  0; Dir[3][1] =  1;
-	Dir[4][0] =  0; Dir[4][1] = -1;
+	Dir[4][0] =  0; Dir[4][1] =  0;
 
 	//Open file
 	fin = fopen(levelfile, "r");
@@ -388,8 +390,8 @@ void LoadLevel(char *levelfile) {
 	}
 
 	//Open file and load the level into the array
-	for(a = 0; a < 29; a++) {
-		for(b = 0; b < 28; b++) {
+	for(a = 0; a < 39; a++) {
+		for(b = 0; b < 38; b++) {
 			fscanf(fin, "%d", &Level[a][b]);
 			if(Level[a][b] == 2) Food++;
 
@@ -448,10 +450,10 @@ void MoveGhosts() {
 	for(a = 0; a < 4; a++) {
 
 		//Switch sides?
-		     if((Loc[a][0] ==  0) && (Dir[a][0] == -1)) Loc[a][0] = 28;
-		else if((Loc[a][0] == 28) && (Dir[a][0] ==  1)) Loc[a][0] =  0;
-		else if((Loc[a][1] ==  0) && (Dir[a][1] == -1)) Loc[a][1] = 27;
-		else if((Loc[a][1] == 27) && (Dir[a][1] ==  1)) Loc[a][1] =  0;
+		     if((Loc[a][0] ==  0) && (Dir[a][0] == -1)) Loc[a][0] = 38;
+		else if((Loc[a][0] == 38) && (Dir[a][0] ==  1)) Loc[a][0] =  0;
+		else if((Loc[a][1] ==  0) && (Dir[a][1] == -1)) Loc[a][1] = 37;
+		else if((Loc[a][1] == 37) && (Dir[a][1] ==  1)) Loc[a][1] =  0;
 		else {
 
 		//Determine which directions we can go
@@ -514,10 +516,10 @@ void MovePacman() {
 	static int itime = 0;
 
 	//Switch sides?
-	     if((Loc[4][0] ==  0) && (Dir[4][0] == -1)) Loc[4][0] = 28;
-	else if((Loc[4][0] == 28) && (Dir[4][0] ==  1)) Loc[4][0] =  0;
-	else if((Loc[4][1] ==  0) && (Dir[4][1] == -1)) Loc[4][1] = 27;
-	else if((Loc[4][1] == 27) && (Dir[4][1] ==  1)) Loc[4][1] =  0;
+	     if((Loc[4][0] ==  0) && (Dir[4][0] == -1)) Loc[4][0] = 38;
+	else if((Loc[4][0] == 38) && (Dir[4][0] ==  1)) Loc[4][0] =  0;
+	else if((Loc[4][1] ==  0) && (Dir[4][1] == -1)) Loc[4][1] = 37;
+	else if((Loc[4][1] == 37) && (Dir[4][1] ==  1)) Loc[4][1] =  0;
 
 	//Or
 	else {
