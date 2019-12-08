@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
 			CreateWindows(39, 38, 1, 1);
 
       IntroScreen();
-      LoadLevel("level01.dat");
+      LoadLevel("/usr/local/share/pacman/Levels/level01.dat");
       MainLoop();		
 		}
    
@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 			CreateWindows(39, 38, 1, 1);
       
       IntroScreen();
-			LoadLevel2("level02.dat");
+			LoadLevel2("/usr/local/share/pacman/Levels/level02.dat");
 			MainLoop2();     
 		}
    
