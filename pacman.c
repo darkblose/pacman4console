@@ -802,7 +802,7 @@ void CheckCollision2()
 		  	}
 
 			  //Pacman dies
-			  else 
+			  else if(Invincible == 0)
         {
 				  wattron(win, COLOR_PAIR(Pacman));
 			  	mvwprintw(win, Loc[8][0], Loc[8][1], "X");
@@ -835,7 +835,8 @@ void CheckCollision2()
 	  			usleep(1000000);
 			  }
 	  	}
-    } 
+    }
+    else if((Loc[a][0] == Loc[9][0]) && (Loc[a][1] == Loc[9][1])) 
     if((Loc[a][0] == Loc[9][0]) && (Loc[a][1] == Loc[9][1]))
     {
       //Ghost dies
@@ -851,7 +852,7 @@ void CheckCollision2()
 				Loc[a][0] = StartingPoints[a][0]; Loc[a][1] = StartingPoints[a][1];
 			}
 			//Pacman dies
-			else 
+			else if(Invincible2 == 0)
       {
 				wattron(win, COLOR_PAIR(Pacman));
 				mvwprintw(win, Loc[9][0], Loc[9][1], "X");
@@ -864,7 +865,7 @@ void CheckCollision2()
 				if(Lives == -1) ExitProgram(END_MSG);
 
 				//Reset level
-				for(a = 0; a < 9; a++) 
+				for(a = 0; a < 10; a++) 
         {
 					Loc[a][0] = StartingPoints[a][0];
 					Loc[a][1] = StartingPoints[a][1];
