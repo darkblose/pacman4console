@@ -1137,7 +1137,7 @@ void MovePacman2()
 			break;
 		case 3:	//PowerUp
 			Level[Loc[9][0]][Loc[9][1]] = 0;
-			Invincible = 1;
+			Invincible2 = 1;
 			if(GhostsInARow == 0) GhostsInARow = 1;
 			itime = time(0);
 			break;
