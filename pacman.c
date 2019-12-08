@@ -88,38 +88,9 @@ int main(int argc, char *argv[])
 			CheckScreenSize();
 			CreateWindows(39, 38, 1, 1);
 
-			//If they specified a level to load
-			if((argc > 1) && (strlen(argv[1]) > 1)) 
-			{
-        IntroScreen();
-				LoadLevel(argv[1]);
-				MainLoop();
-			}
-        
-			//If not, display intro screen then use default levels
-			else 
-			{
-				//Show intro "movie"
-				IntroScreen();
-
-				j = 1;
-				//They want to start at a level 1-9
-				if(argc > 1)
-        {
-          for(LevelNumber = '1'; LevelNumber <= '9'; LevelNumber++)
-          {
-            if(LevelNumber == argv[1][0]) j = LevelNumber - '0';			
-          }								  
-					//Load 9 levels, 1 by 1, if you can beat all 9 levels in a row, you're awesome
-					for(LevelNumber = j; LevelNumber < 10; LevelNumber++) 
-					{
-						LevelFile[strlen(LevelFile) - 6] = '0';
-						LevelFile[strlen(LevelFile) - 5] = LevelNumber + '0';
-						LoadLevel(LevelFile);
-						Invincible = 0;			//Reset invincibility
-					}
-        }
-			}
+      IntroScreen();
+      LoadLevel("level01.dat");
+      MainLoop();		
 		}
    
 		else if (menu == 2)
@@ -130,39 +101,10 @@ int main(int argc, char *argv[])
 			InitCurses();
 			CheckScreenSize();
 			CreateWindows(39, 38, 1, 1);
-
-			//If they specified a level to load
-			if((argc > 1) && (strlen(argv[1]) > 1)) 
-			{
-        IntroScreen();
-				LoadLevel2(argv[1]);
-				MainLoop2();
-			}
-        
-			//If not, display intro screen then use default levels
-			else 
-			{
-				//Show intro "movie"
-				IntroScreen();
-
-				j = 1;
-				//They want to start at a level 1-9
-				if(argc > 1)
-        {
-					for(LevelNumber = '1'; LevelNumber <= '9'; LevelNumber++)
-          {
-						if(LevelNumber == argv[1][0]) j = LevelNumber - '0';	
-          }										  
-					//Load 9 levels, 1 by 1, if you can beat all 9 levels in a row, you're awesome
-					for(LevelNumber = j; LevelNumber < 10; LevelNumber++) 
-					{
-						LevelFile[strlen(LevelFile) - 6] = '0';
-						LevelFile[strlen(LevelFile) - 5] = LevelNumber + '0';
-						LoadLevel2(LevelFile);
-						Invincible2 = 0;			//Reset invincibility
-					}
-        }
-			}
+      
+      IntroScreen();
+			LoadLevel2("level02.dat");
+			MainLoop2();     
 		}
    
 		else if (menu == 3)
